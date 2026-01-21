@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Salons{% endblock %}
+
+{% block extra_head %}
+<script src="{% static 'chat/chat.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center page-head">
+  <h2 class="mb-0">Salons</h2>
+  <a class="btn btn-primary" href="{% url 'room_create' %}">+ Créer un salon</a>
+</div>
+
+<div class="list-group shadow-sm" id="room-list">
+  {% for room in rooms %}
+    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+       href="{% url 'room_detail' room.id %}">
+  <div>
+    <div class="d-flex align-items-center gap-2">
+      <div>{{ room.name }}</div>
+      {% if room.password %}
+        <span class="room-lock" aria-label="Salon protege">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="10" rx="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </span>
+      {% endif %}
+    </div>
+    {% if room.last_message_content %}
+      <small class="text-muted">
+        {% if room.last_message_is_deleted %}[message supprimé]{% else %}{{ room.last_message_author }}: {{ room.last_message_content }}{% endif %}
+        {% if room.last_message_created_at %}¶ú il y a {{ room.last_message_created_at|timesince }}{% endif %}
+      </small>
+    {% else %}
+      <small class="text-muted">Aucun message</small>
+    {% endif %}
+  </div>
+  <small class="text-muted">Créé par {{ room.created_by.username }}</small>
+</a>
+  {% empty %}
+    <div class="list-group-item">Aucun salon pour lƒ?Tinstant.</div>
+  {% endfor %}
+</div>
+
+<script>
+  window.CHAT_LIST_CONFIG = {
+    apiRoomListUrl: "{% url 'api_room_list' %}",
+    roomDetailBase: "{% url 'room_detail' 0 %}".replace("/0/", "/"),
+  };
+</script>
+{% endblock %}

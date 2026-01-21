@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Accès refusé{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-body text-center">
+    <div class="mb-3 text-danger">
+      <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"></circle>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </div>
+    <h3 class="mb-3 text-danger">Accès refusé</h3>
+    <p class="text-danger mb-4">
+      Tu es banni de ce salon.
+      {% if room %}Salon : <strong>{{ room.name }}</strong>{% endif %}
+    </p>
+    <a class="btn btn-outline-secondary" href="{% url 'room_list' %}">&larr; Retour aux salons</a>
+  </div>
+</div>
+{% endblock %}
